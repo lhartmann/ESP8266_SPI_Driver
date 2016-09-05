@@ -25,11 +25,18 @@
 #ifndef SPI_APP_H
 #define SPI_APP_H
 
+#include "c_types.h"
+#include "esp8266/eagle_soc.h"
 #include "spi_register.h"
-#include "ets_sys.h"
-#include "osapi.h"
+#include "esp8266/ets_sys.h"
+#include "esp8266/pin_mux_register.h"
+//#include "osapi.h"
 //#include "uart.h"
-#include "os_type.h"
+//#include "os_type.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //Define SPI hardware modules
 #define SPI 0
@@ -50,13 +57,9 @@
 #define SPI_CLK_CNTDIV 2
 #define SPI_CLK_FREQ CPU_CLK_FREQ/(SPI_CLK_PREDIV*SPI_CLK_CNTDIV) // 80 / 20 = 4 MHz
 
-
-
-
-
-void spi_init(uint8 spi_no);
-void spi_mode(uint8 spi_no, uint8 spi_cpha,uint8 spi_cpol);
-void spi_init_gpio(uint8 spi_no, uint8 sysclk_as_spiclk);
+void spi_init(uint8 spi_no, int hw_cs);
+void spi_mode(uint8 spi_no, uint8 spi_cpha, uint8 spi_cpol);
+void spi_init_gpio(uint8 spi_no, uint8 sysclk_as_spiclk, int hw_cs);
 void spi_clock(uint8 spi_no, uint16 prediv, uint8 cntdiv);
 void spi_tx_byte_order(uint8 spi_no, uint8 byte_order);
 void spi_rx_byte_order(uint8 spi_no, uint8 byte_order);
@@ -75,5 +78,9 @@ uint32 spi_transaction(uint8 spi_no, uint8 cmd_bits, uint16 cmd_data, uint32 add
 #define spi_rx16(spi_no)      spi_transaction(spi_no, 0, 0, 0, 0, 0, 0, 16,   0)
 #define spi_rx32(spi_no)      spi_transaction(spi_no, 0, 0, 0, 0, 0, 0, 32,   0)
 
+#ifdef __cplusplus
+}
+#endif
+	
 #endif
 
